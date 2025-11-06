@@ -95,17 +95,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.lg,
     paddingBottom: theme.spacing.md,
     backgroundColor: theme.colors.primary,
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: theme.fontSize.xxxl,
     fontWeight: theme.fontWeight.bold,
     color: theme.colors.white,
     marginBottom: theme.spacing.xs,
+    textAlign: 'center',
   },
   headerSubtitle: {
     fontSize: theme.fontSize.sm,
     color: theme.colors.accent,
     fontWeight: theme.fontWeight.medium,
+    textAlign: 'center',
   },
   searchContainer: {
     paddingHorizontal: theme.spacing.lg,
