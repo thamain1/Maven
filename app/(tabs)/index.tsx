@@ -31,27 +31,29 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      <TouchableOpacity
-        style={styles.partnerParkingBanner}
-        onPress={() => router.push('/partner-parking')}
-        activeOpacity={0.8}>
-        <View style={styles.partnerParkingIconWrapper}>
-          <Users size={28} color={theme.colors.accent} />
-        </View>
-        <View style={styles.partnerParkingContent}>
-          <Text style={styles.partnerParkingTitle}>Partner Parking</Text>
-          <Text style={styles.partnerParkingSubtitle}>Reserve multiple spaces for your group</Text>
-        </View>
-        <Navigation size={20} color={theme.colors.accent} style={{ transform: [{ rotate: '-90deg' }] }} />
-      </TouchableOpacity>
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <TouchableOpacity
+          style={styles.partnerParkingBanner}
+          onPress={() => router.push('/partner-parking')}
+          activeOpacity={0.8}>
+          <View style={styles.partnerParkingIconWrapper}>
+            <Users size={28} color={theme.colors.accent} />
+          </View>
+          <View style={styles.partnerParkingContent}>
+            <Text style={styles.partnerParkingTitle}>Partner Parking</Text>
+            <Text style={styles.partnerParkingSubtitle}>Reserve multiple spaces for your group</Text>
+          </View>
+          <Navigation size={20} color={theme.colors.accent} style={{ transform: [{ rotate: '-90deg' }] }} />
+        </TouchableOpacity>
 
-      <View style={styles.mapPlaceholder}>
-        <MapPin size={32} color={theme.colors.accent} />
-        <Text style={styles.mapPlaceholderText}>Map View</Text>
-        <Text style={styles.mapPlaceholderSubtext}>Showing nearby parking locations</Text>
-      </View>
-
-      <ScrollView style={styles.locationsList} showsVerticalScrollIndicator={false}>
+        <View style={styles.mapPlaceholder}>
+          <MapPin size={32} color={theme.colors.accent} />
+          <Text style={styles.mapPlaceholderText}>Map View</Text>
+          <Text style={styles.mapPlaceholderSubtext}>Showing nearby parking locations</Text>
+        </View>
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderTitle}>Nearby Parking</Text>
           <Text style={styles.listHeaderCount}>{mockLocations.length} locations</Text>
@@ -182,6 +184,12 @@ const styles = StyleSheet.create({
     color: theme.colors.accent,
     fontWeight: theme.fontWeight.medium,
   },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.xl,
+  },
   mapPlaceholder: {
     height: 200,
     backgroundColor: theme.colors.backgroundDark,
@@ -201,15 +209,12 @@ const styles = StyleSheet.create({
     color: theme.colors.textLight,
     marginTop: theme.spacing.xs,
   },
-  locationsList: {
-    flex: 1,
-    paddingHorizontal: theme.spacing.lg,
-  },
   listHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.lg,
   },
   listHeaderTitle: {
     fontSize: theme.fontSize.xl,
@@ -226,6 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.white,
     borderRadius: theme.borderRadius.lg,
     marginBottom: theme.spacing.md,
+    marginHorizontal: theme.spacing.lg,
     ...theme.shadows.md,
     overflow: 'hidden',
   },
