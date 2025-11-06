@@ -1,0 +1,152 @@
+MAVEN PARK - PROJECT STRUCTURE
+================================
+
+📱 MOBILE APP SCREENS
+├── 🎯 Onboarding Flow (4 screens)
+│   ├── 1. Welcome Screen - Brand introduction
+│   ├── 2. Payment Setup - Card information
+│   ├── 3. Vehicle Registration - Plate & state
+│   └── 4. Notifications - Permission request
+│
+├── 🏠 Main App (Tab Navigation)
+│   ├── Tab 1: Home (MapPin icon)
+│   │   ├── Map view placeholder
+│   │   ├── Search functionality
+│   │   └── Location list (5 locations)
+│   │
+│   ├── Tab 2: Favorites (Heart icon)
+│   │   ├── Saved locations list
+│   │   └── Empty state design
+│   │
+│   ├── Tab 3: Sessions (Car icon)
+│   │   ├── Active session card
+│   │   ├── Session controls
+│   │   ├── Historical sessions
+│   │   └── Empty state design
+│   │
+│   └── Tab 4: Profile (User icon)
+│       ├── Profile header card
+│       ├── Account settings
+│       ├── Preferences
+│       └── Support options
+│
+└── 📍 Modal Screens
+    └── Location Detail
+        ├── Hero image header
+        ├── Stats grid
+        ├── Amenities list
+        └── Action buttons
+
+🎨 DESIGN SYSTEM
+├── Color Palette
+│   ├── Primary: #1a1a1a (Black)
+│   ├── Accent: #d4af37 (Gold)
+│   ├── Success: #10b981 (Green)
+│   └── Background: #ffffff (White)
+│
+├── Typography
+│   ├── Display: 48px / Bold
+│   ├── Title: 32px / Bold
+│   ├── Heading: 24px / Semibold
+│   ├── Body: 16px / Regular
+│   └── Small: 14px / Medium
+│
+├── Spacing (8px grid)
+│   ├── XS: 4px
+│   ├── SM: 8px
+│   ├── MD: 16px
+│   ├── LG: 24px
+│   └── XL: 32px
+│
+└── Components
+    ├── Button (3 variants)
+    ├── Card (3 elevations)
+    └── Icons (Lucide)
+
+💾 DATABASE SCHEMA
+├── parking_locations
+│   ├── Location details
+│   ├── Amenities (JSON)
+│   └── Availability data
+│
+├── user_profiles
+│   └── Account information
+│
+├── user_vehicles
+│   └── Registered vehicles
+│
+├── parking_sessions
+│   └── Active & historical
+│
+└── favorite_locations
+    └── Saved locations
+
+📂 FILE STRUCTURE
+├── app/
+│   ├── (tabs)/
+│   │   ├── _layout.tsx       # Tab navigation
+│   │   ├── index.tsx          # Home screen
+│   │   ├── favorites.tsx      # Favorites screen
+│   │   ├── sessions.tsx       # Sessions screen
+│   │   └── profile.tsx        # Profile screen
+│   │
+│   ├── location/
+│   │   └── [id].tsx           # Dynamic location detail
+│   │
+│   ├── _layout.tsx            # Root layout
+│   ├── index.tsx              # App entry
+│   └── onboarding.tsx         # Onboarding flow
+│
+├── components/
+│   ├── Button.tsx             # Reusable button
+│   └── Card.tsx               # Reusable card
+│
+├── constants/
+│   └── theme.ts               # Design tokens
+│
+├── data/
+│   └── mockData.ts            # Sample data
+│
+└── supabase/
+    └── migrations/            # Database schema
+
+🎯 KEY FEATURES
+├── ✓ Map-first home interface
+├── ✓ Real-time parking availability
+├── ✓ Location search & filtering
+├── ✓ Favorites system
+├── ✓ Active session tracking
+├── ✓ Session history
+├── ✓ Payment method management
+├── ✓ Vehicle registration
+├── ✓ Profile & settings
+└── ✓ Support & help access
+
+🚀 TECHNICAL STACK
+├── Expo SDK 54
+├── React Native 0.81
+├── Expo Router (file-based)
+├── TypeScript
+├── Supabase (backend)
+├── Lucide Icons
+└── React Navigation
+
+📊 SAMPLE DATA
+├── 5 Parking locations (Houston, TX)
+├── 1 Active session
+├── 2 Historical sessions
+└── 2 Favorite locations
+
+🎨 BRAND ALIGNMENT
+├── Maven Global corporate identity
+├── Professional black & gold palette
+├── Clean, minimalist design
+├── Data-driven interface
+└── Modern, innovative aesthetic
+
+📈 STATS
+├── 9 Total screens
+├── 4 Main tabs
+├── 2,410 Bundled modules
+├── 3.12 MB Web bundle
+└── Build: ✓ Successful
