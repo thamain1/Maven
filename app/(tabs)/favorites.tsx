@@ -1,25 +1,37 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Heart, MapPin, Navigation, DollarSign } from 'lucide-react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { useState } from 'react';
+import { Heart, MapPin, Navigation, DollarSign, Star } from 'lucide-react-native';
+import { useRouter } from 'expo-router';
 import { theme } from '../../constants/theme';
-
-const mockFavorites = [
-  {
-    id: '1',
-    name: 'Downtown Business Center',
-    address: '500 Main St, Houston, TX 77002',
-    distance: '0.3 miles',
-    rate: 3.00,
-  },
-  {
-    id: '2',
-    name: 'Riverside Plaza',
-    address: '888 Westheimer Rd, Houston, TX 77006',
-    distance: '0.8 miles',
-    rate: 4.50,
-  },
-];
+import { mockLocations } from '../../data/mockData';
 
 export default function FavoritesScreen() {
+  const router = useRouter();
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(['1', '2']);
+
+  const favoriteLocations = mockLocations.filter(loc => favoriteIds.includes(loc.id));
+
+  const handleRemoveFavorite = (locationId: string, locationName: string) => {
+    Alert.alert(
+      'Remove Favorite',
+      `Remove ${locationName} from favorites?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: () => {
+            setFavoriteIds(favoriteIds.filter(id => id !== locationId));
+          },
+        },
+      ]
+    );
+  };
+
+  const handleLocationPress = (locationId: string) => {
+    router.push(`/location/${locationId}`);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,29 +40,50 @@ export default function FavoritesScreen() {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {mockFavorites.length === 0 ? (
+        {favoriteLocations.length === 0 ? (
           <View style={styles.emptyState}>
             <Heart size={48} color={theme.colors.textMuted} />
             <Text style={styles.emptyStateText}>No favorites yet</Text>
             <Text style={styles.emptyStateSubtext}>
               Save your frequently used parking locations for quick access
             </Text>
+            <TouchableOpacity
+              style={styles.browseButton}
+              onPress={() => router.push('/(tabs)')}
+              activeOpacity={0.8}>
+              <Text style={styles.browseButtonText}>Browse Locations</Text>
+            </TouchableOpacity>
           </View>
         ) : (
-          mockFavorites.map((location) => (
-            <TouchableOpacity key={location.id} style={styles.favoriteCard} activeOpacity={0.7}>
+          favoriteLocations.map((location) => (
+            <TouchableOpacity
+              key={location.id}
+              style={styles.favoriteCard}
+              onPress={() => handleLocationPress(location.id)}
+              activeOpacity={0.7}>
               <View style={styles.favoriteIcon}>
                 <MapPin size={24} color={theme.colors.white} />
               </View>
               <View style={styles.favoriteInfo}>
                 <View style={styles.favoriteHeader}>
                   <Text style={styles.favoriteName}>{location.name}</Text>
-                  <TouchableOpacity style={styles.heartButton}>
+                  <TouchableOpacity
+                    style={styles.heartButton}
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      handleRemoveFavorite(location.id, location.name);
+                    }}>
                     <Heart size={20} color={theme.colors.error} fill={theme.colors.error} />
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.favoriteAddress}>{location.address}</Text>
+                <Text style={styles.favoriteAddress}>
+                  {location.address}, {location.city}, {location.state}
+                </Text>
                 <View style={styles.favoriteMeta}>
+                  <View style={styles.metaItem}>
+                    <Star size={14} color={theme.colors.accent} fill={theme.colors.accent} />
+                    <Text style={styles.metaText}>{location.rating}</Text>
+                  </View>
                   <View style={styles.metaItem}>
                     <Navigation size={14} color={theme.colors.textLight} />
                     <Text style={styles.metaText}>{location.distance}</Text>
@@ -59,6 +92,12 @@ export default function FavoritesScreen() {
                     <DollarSign size={14} color={theme.colors.textLight} />
                     <Text style={styles.metaText}>${location.rate}/hr</Text>
                   </View>
+                </View>
+                <View style={styles.availabilityBadge}>
+                  <View style={styles.availabilityDot} />
+                  <Text style={styles.availabilityText}>
+                    {location.availableSpaces} spaces available
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -114,6 +153,18 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     paddingHorizontal: theme.spacing.xl,
   },
+  browseButton: {
+    backgroundColor: theme.colors.primary,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.xl,
+    borderRadius: theme.borderRadius.lg,
+    marginTop: theme.spacing.lg,
+  },
+  browseButtonText: {
+    fontSize: theme.fontSize.base,
+    fontWeight: theme.fontWeight.semibold,
+    color: theme.colors.white,
+  },
   favoriteCard: {
     flexDirection: 'row',
     backgroundColor: theme.colors.white,
@@ -162,6 +213,28 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   metaText: {
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.textLight,
+    fontWeight: theme.fontWeight.medium,
+  },
+  availabilityBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: theme.colors.backgroundDark,
+    paddingVertical: 4,
+    paddingHorizontal: theme.spacing.sm,
+    borderRadius: theme.borderRadius.sm,
+    alignSelf: 'flex-start',
+    marginTop: theme.spacing.sm,
+  },
+  availabilityDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.colors.success,
+    marginRight: theme.spacing.xs,
+  },
+  availabilityText: {
     fontSize: theme.fontSize.xs,
     color: theme.colors.textLight,
     fontWeight: theme.fontWeight.medium,
