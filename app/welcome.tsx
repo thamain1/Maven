@@ -26,14 +26,16 @@ export default function WelcomeScreen() {
           <View style={styles.header}>
             <View style={styles.logoContainer}>
               <Image
-                source={require('../assets/images/image copy.png')}
+                source={require('../assets/images/670612f1375c54fb78a40a65_Maven Global Inc_logo_white_crop_vertical-p-500.png')}
                 style={styles.logo}
                 resizeMode="contain"
               />
             </View>
-            <Text style={styles.brandName}>Maven Park</Text>
-            <View style={styles.brandLine} />
-            <Text style={styles.tagline}>Smart Parking Solutions</Text>
+            <View style={styles.brandContainer}>
+              <Text style={styles.brandName}>Maven Park</Text>
+              <View style={styles.brandLine} />
+              <Text style={styles.tagline}>Smart Parking Solutions</Text>
+            </View>
           </View>
 
           <View style={styles.featuresSection}>
@@ -116,9 +118,9 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.xl,
   },
   logoContainer: {
-    marginBottom: theme.spacing.xl,
-    width: 180,
-    height: 180,
+    marginBottom: theme.spacing.lg,
+    width: 200,
+    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -126,12 +128,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  brandContainer: {
+    alignItems: 'center',
+  },
   brandName: {
     fontSize: 48,
     fontWeight: '700',
     color: theme.colors.white,
     letterSpacing: 1,
     marginBottom: theme.spacing.md,
+    textAlign: 'center',
   },
   brandLine: {
     width: 60,
