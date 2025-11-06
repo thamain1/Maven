@@ -4,6 +4,7 @@ import { MapPin, DollarSign, Navigation, Grid3x3, CheckCircle2, ArrowRight, X } 
 import { theme } from '../../constants/theme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { mockLocations } from '../../data/mockData';
+import { MockMap } from '../../components/MockMap';
 
 export default function LocationsScreen() {
   const router = useRouter();
@@ -193,6 +194,10 @@ export default function LocationsScreen() {
           <View style={styles.filterChip}>
             <Text style={styles.filterChipText}>{layoutPreference}</Text>
           </View>
+        </View>
+
+        <View style={styles.mapSection}>
+          <MockMap height={200} showMarkers={true} markerCount={eligibleLocations.length} centerLabel="Nearby Locations" />
         </View>
 
         <View style={styles.section}>
@@ -391,6 +396,13 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.sm,
     color: theme.colors.text,
     fontWeight: theme.fontWeight.medium,
+  },
+  mapSection: {
+    marginHorizontal: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
+    borderRadius: theme.borderRadius.lg,
+    overflow: 'hidden',
+    ...theme.shadows.md,
   },
   section: {
     paddingHorizontal: theme.spacing.lg,

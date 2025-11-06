@@ -17,6 +17,7 @@ import {
 import { theme } from '../../constants/theme';
 import { mockLocations } from '../../data/mockData';
 import { useFavorites } from '../../contexts/FavoritesContext';
+import { MockMap } from '../../components/MockMap';
 
 export default function LocationDetailScreen() {
   const router = useRouter();
@@ -124,6 +125,13 @@ export default function LocationDetailScreen() {
           <View style={styles.hoursCard}>
             <Clock size={20} color={theme.colors.success} />
             <Text style={styles.hoursText}>{location.hours}</Text>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Location Map</Text>
+          <View style={styles.mapContainer}>
+            <MockMap height={200} showMarkers={true} markerCount={1} />
           </View>
         </View>
       </ScrollView>
@@ -326,6 +334,11 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.base,
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.text,
+  },
+  mapContainer: {
+    borderRadius: theme.borderRadius.md,
+    overflow: 'hidden',
+    ...theme.shadows.sm,
   },
   footer: {
     flexDirection: 'row',

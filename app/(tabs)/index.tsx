@@ -5,6 +5,7 @@ import { theme } from '../../constants/theme';
 import { useRouter } from 'expo-router';
 import { mockLocations } from '../../data/mockData';
 import { useFavorites } from '../../contexts/FavoritesContext';
+import { MockMap } from '../../components/MockMap';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -51,11 +52,7 @@ export default function HomeScreen() {
           <Navigation size={20} color={theme.colors.accent} style={{ transform: [{ rotate: '-90deg' }] }} />
         </TouchableOpacity>
 
-        <View style={styles.mapPlaceholder}>
-          <MapPin size={32} color={theme.colors.accent} />
-          <Text style={styles.mapPlaceholderText}>Map View</Text>
-          <Text style={styles.mapPlaceholderSubtext}>Showing nearby parking locations</Text>
-        </View>
+        <MockMap height={250} showMarkers={true} markerCount={8} centerLabel="Your Location" />
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderTitle}>Nearby Parking</Text>
           <Text style={styles.listHeaderCount}>{mockLocations.length} locations</Text>
@@ -208,25 +205,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: theme.spacing.xl,
-  },
-  mapPlaceholder: {
-    height: 200,
-    backgroundColor: theme.colors.backgroundDark,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  },
-  mapPlaceholderText: {
-    fontSize: theme.fontSize.lg,
-    fontWeight: theme.fontWeight.semibold,
-    color: theme.colors.text,
-    marginTop: theme.spacing.sm,
-  },
-  mapPlaceholderSubtext: {
-    fontSize: theme.fontSize.sm,
-    color: theme.colors.textLight,
-    marginTop: theme.spacing.xs,
   },
   listHeader: {
     flexDirection: 'row',
