@@ -1,50 +1,25 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../constants/theme';
+import { Image, StyleSheet } from 'react-native';
 
 interface MavenLogoProps {
   size?: number;
 }
 
 export function MavenLogo({ size = 200 }: MavenLogoProps) {
-  const logoSize = size;
-  const fontSize = size * 0.35;
-  const subtitleSize = size * 0.08;
+  const aspectRatio = 500 / 835;
+  const width = size;
+  const height = size / aspectRatio;
 
   return (
-    <View style={[styles.container, { width: logoSize, height: logoSize }]}>
-      <View style={styles.logoBox}>
-        <Text style={[styles.mavenText, { fontSize }]}>Maven</Text>
-        <Text style={[styles.globalText, { fontSize: subtitleSize }]}>GLOBAL INC.</Text>
-      </View>
-    </View>
+    <Image
+      source={require('../assets/images/maven-global-logo.png')}
+      style={[styles.logo, { width, height }]}
+      resizeMode="contain"
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logoBox: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(212, 175, 55, 0.1)',
-    borderWidth: 2,
-    borderColor: theme.colors.accent,
-    borderRadius: 16,
-    padding: 20,
-  },
-  mavenText: {
-    fontWeight: '800',
-    color: theme.colors.accent,
-    letterSpacing: 2,
-    textTransform: 'uppercase',
-  },
-  globalText: {
-    fontWeight: '600',
-    color: theme.colors.white,
-    letterSpacing: 4,
-    marginTop: 4,
-    opacity: 0.8,
+  logo: {
+    alignSelf: 'center',
   },
 });
