@@ -2,6 +2,16 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'rea
 import { User, CreditCard, Car, Bell, Shield, HelpCircle, MessageCircle, Settings, ChevronRight, LogOut } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import {
+  PersonalInfoModal,
+  PaymentMethodsModal,
+  VehiclesModal,
+  NotificationsModal,
+  PrivacyModal,
+  HelpCenterModal,
+  ContactSupportModal,
+} from '../../components/ProfileModals';
 
 const profileSections = [
   {
@@ -30,21 +40,42 @@ const profileSections = [
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const [personalInfoVisible, setPersonalInfoVisible] = useState(false);
+  const [paymentMethodsVisible, setPaymentMethodsVisible] = useState(false);
+  const [vehiclesVisible, setVehiclesVisible] = useState(false);
+  const [notificationsVisible, setNotificationsVisible] = useState(false);
+  const [privacyVisible, setPrivacyVisible] = useState(false);
+  const [helpCenterVisible, setHelpCenterVisible] = useState(false);
+  const [contactSupportVisible, setContactSupportVisible] = useState(false);
 
   const handleMenuItemPress = (action: string) => {
-    Alert.alert(
-      'Feature',
-      `${action.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} feature coming soon!`,
-      [{ text: 'OK' }]
-    );
+    switch (action) {
+      case 'personal-info':
+        setPersonalInfoVisible(true);
+        break;
+      case 'payment-methods':
+        setPaymentMethodsVisible(true);
+        break;
+      case 'vehicles':
+        setVehiclesVisible(true);
+        break;
+      case 'notifications':
+        setNotificationsVisible(true);
+        break;
+      case 'privacy':
+        setPrivacyVisible(true);
+        break;
+      case 'help':
+        setHelpCenterVisible(true);
+        break;
+      case 'contact':
+        setContactSupportVisible(true);
+        break;
+    }
   };
 
   const handleEditProfile = () => {
-    Alert.alert(
-      'Edit Profile',
-      'Profile editing feature coming soon!',
-      [{ text: 'OK' }]
-    );
+    setPersonalInfoVisible(true);
   };
 
   const handleSignOut = () => {
@@ -120,6 +151,14 @@ export default function ProfileScreen() {
 
         <Text style={styles.versionText}>Version 1.0.0</Text>
       </ScrollView>
+
+      <PersonalInfoModal visible={personalInfoVisible} onClose={() => setPersonalInfoVisible(false)} />
+      <PaymentMethodsModal visible={paymentMethodsVisible} onClose={() => setPaymentMethodsVisible(false)} />
+      <VehiclesModal visible={vehiclesVisible} onClose={() => setVehiclesVisible(false)} />
+      <NotificationsModal visible={notificationsVisible} onClose={() => setNotificationsVisible(false)} />
+      <PrivacyModal visible={privacyVisible} onClose={() => setPrivacyVisible(false)} />
+      <HelpCenterModal visible={helpCenterVisible} onClose={() => setHelpCenterVisible(false)} />
+      <ContactSupportModal visible={contactSupportVisible} onClose={() => setContactSupportVisible(false)} />
     </View>
   );
 }
