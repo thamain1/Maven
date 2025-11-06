@@ -37,7 +37,8 @@ export default function LocationDetailScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageHeader}>
+      <View style={styles.mapHeader}>
+        <MockMap height={240} showMarkers={true} markerCount={1} />
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <ArrowLeft size={24} color={theme.colors.white} />
         </TouchableOpacity>
@@ -50,9 +51,6 @@ export default function LocationDetailScreen() {
             fill={favorite ? theme.colors.error : 'none'}
           />
         </TouchableOpacity>
-        <View style={styles.imageContent}>
-          <MapPin size={48} color={theme.colors.white} />
-        </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -128,12 +126,6 @@ export default function LocationDetailScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Location Map</Text>
-          <View style={styles.mapContainer}>
-            <MockMap height={200} showMarkers={true} markerCount={1} />
-          </View>
-        </View>
       </ScrollView>
 
       <View style={styles.footer}>
@@ -154,11 +146,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  imageHeader: {
+  mapHeader: {
     height: 240,
-    backgroundColor: theme.colors.secondary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    position: 'relative',
   },
   backButton: {
     position: 'absolute',
@@ -179,10 +169,6 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageContent: {
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -334,11 +320,6 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSize.base,
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.text,
-  },
-  mapContainer: {
-    borderRadius: theme.borderRadius.md,
-    overflow: 'hidden',
-    ...theme.shadows.sm,
   },
   footer: {
     flexDirection: 'row',
