@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
-import { User, CreditCard, Car, Bell, ChevronRight, Mail, Phone, Camera, Shield, MapPin as MapPinIcon, Home } from 'lucide-react-native';
+import { User, CreditCard, Car, Bell, ChevronRight, Mail, Phone, Camera, Shield, MapPin as MapPinIcon, Home, ArrowLeft } from 'lucide-react-native';
 import { theme } from '../constants/theme';
 
 const steps = [
@@ -75,6 +75,14 @@ export default function OnboardingScreen() {
     console.log('Skip button pressed');
     if (currentStep === 0) return;
     router.replace('/(tabs)');
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      router.back();
+    }
   };
 
   const handlePhotoUpload = () => {
@@ -402,6 +410,17 @@ export default function OnboardingScreen() {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <View style={styles.topBar}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+          <ArrowLeft size={24} color={theme.colors.white} />
+        </TouchableOpacity>
+        {currentStep > 0 && (
+          <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+            <Text style={styles.skipButtonText}>Skip</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
       <View style={styles.progressContainer}>
         {steps.map((step, index) => (
           <View key={step.id} style={styles.progressBarContainer}>
@@ -414,12 +433,6 @@ export default function OnboardingScreen() {
           </View>
         ))}
       </View>
-
-      {currentStep > 0 && (
-        <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-          <Text style={styles.skipButtonText}>Skip</Text>
-        </TouchableOpacity>
-      )}
 
       <View style={styles.contentWrapper}>
         {renderStepContent()}
@@ -514,11 +527,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.primary,
   },
-  progressContainer: {
+  topBar: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingTop: 60,
     paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.sm,
+  },
+  backButton: {
+    padding: theme.spacing.xs,
+  },
+  progressContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: theme.spacing.lg,
     gap: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
   },
   progressBarContainer: {
     flex: 1,
@@ -536,11 +560,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.accent,
   },
   skipButton: {
-    position: 'absolute',
-    top: 60,
-    right: theme.spacing.lg,
     padding: theme.spacing.sm,
-    zIndex: 10,
   },
   skipButtonText: {
     fontSize: theme.fontSize.base,
