@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Animated, Dimensions } from 'react-native';
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'expo-router';
 import { theme } from '../constants/theme';
-import { Image } from 'react-native';
+import { MapPin } from 'lucide-react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -105,11 +105,7 @@ export default function AnimatedWelcomeScreen() {
           },
         ]}>
         <View style={styles.logoContainer}>
-          <Image
-            source={require('../assets/images/670612f1375c54fb78a40a65_Maven Global Inc_logo_white_crop_vertical-p-500.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          <MapPin size={120} color={theme.colors.accent} strokeWidth={1.5} />
         </View>
 
         <Animated.View

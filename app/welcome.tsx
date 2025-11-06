@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MapPin, Zap, Shield, Clock } from 'lucide-react-native';
 import { theme } from '../constants/theme';
@@ -25,11 +25,7 @@ export default function WelcomeScreen() {
           showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <Image
-                source={require('../assets/images/670612f1375c54fb78a40a65_Maven Global Inc_logo_white_crop_vertical-p-500.png')}
-                style={styles.logo}
-                resizeMode="contain"
-              />
+              <MapPin size={120} color={theme.colors.accent} strokeWidth={1.5} />
             </View>
             <View style={styles.brandContainer}>
               <Text style={styles.brandName}>Maven Park</Text>
