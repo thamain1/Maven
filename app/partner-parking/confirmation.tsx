@@ -93,7 +93,15 @@ Share this with your group!
   if (isConfirmed) {
     return (
       <View style={styles.container}>
-        <View style={styles.successContainer}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>Confirmed!</Text>
+          <Text style={styles.headerSubtitle}>Your group parking reservation</Text>
+        </View>
+
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.successScrollContent}
+          showsVerticalScrollIndicator={false}>
           <View style={styles.successIconContainer}>
             <CheckCircle2 size={80} color={theme.colors.success} />
           </View>
@@ -170,7 +178,7 @@ Share this with your group!
             activeOpacity={0.8}>
             <Text style={styles.doneButtonText}>Done</Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -556,13 +564,13 @@ const styles = StyleSheet.create({
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.white,
   },
-  successContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  successScrollContent: {
     padding: theme.spacing.lg,
+    paddingBottom: theme.spacing.xxl,
   },
   successIconContainer: {
+    alignItems: 'center',
+    marginTop: theme.spacing.xl,
     marginBottom: theme.spacing.xl,
   },
   successTitle: {
