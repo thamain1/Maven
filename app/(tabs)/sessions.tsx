@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { useState } from 'react';
-import { Clock, MapPin, Calendar, DollarSign, X, Plus } from 'lucide-react-native';
+import { Clock, MapPin, Calendar, DollarSign, X, Plus, CheckCircle2, CreditCard } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
 
 const mockSession = {
@@ -25,26 +25,23 @@ export default function SessionsScreen() {
   const hasActiveSession = true;
   const [showExtendModal, setShowExtendModal] = useState(false);
   const [selectedExtension, setSelectedExtension] = useState<number | null>(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleExtendSession = () => {
     if (selectedExtension !== null) {
-      const option = extensionOptions[selectedExtension];
-      Alert.alert(
-        'Extend Session',
-        `Extend your parking by ${option.label} for $${option.price.toFixed(2)}?`,
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Confirm',
-            onPress: () => {
-              setShowExtendModal(false);
-              setSelectedExtension(null);
-              Alert.alert('Success', `Your session has been extended by ${option.label}!`);
-            },
-          },
-        ]
-      );
+      setShowExtendModal(false);
+      setIsProcessing(true);
+      setTimeout(() => {
+        setIsProcessing(false);
+        setShowConfirmation(true);
+      }, 1500);
     }
+  };
+
+  const handleCloseConfirmation = () => {
+    setShowConfirmation(false);
+    setSelectedExtension(null);
   };
 
   return (
@@ -277,6 +274,134 @@ export default function SessionsScreen() {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={isProcessing}
+        animationType="fade"
+        transparent={true}>
+        <View style={styles.processingOverlay}>
+          <View style={styles.processingCard}>
+            <Clock size={48} color={theme.colors.accent} />
+            <Text style={styles.processingText}>Processing Extension...</Text>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={showConfirmation}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={handleCloseConfirmation}>
+        <View style={styles.modalContainer}>
+          <View style={styles.confirmationHeader}>
+            <View>
+              <Text style={styles.confirmationHeaderTitle}>Extension Confirmed!</Text>
+              <Text style={styles.confirmationHeaderSubtitle}>Your parking has been extended</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.modalCloseButton}
+              onPress={handleCloseConfirmation}>
+              <X size={24} color={theme.colors.text} />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            style={styles.modalContent}
+            contentContainerStyle={styles.confirmationScrollContent}
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.confirmationIconContainer}>
+              <CheckCircle2 size={80} color={theme.colors.success} />
+            </View>
+
+            <Text style={styles.confirmationTitle}>Time Extended Successfully!</Text>
+            <Text style={styles.confirmationSubtitle}>
+              You have more time to park worry-free
+            </Text>
+
+            <View style={styles.confirmationDetailsCard}>
+              <View style={styles.confirmationCodeRow}>
+                <Text style={styles.confirmationCodeLabel}>Confirmation Code</Text>
+                <Text style={styles.confirmationCode}>EXT-{Date.now().toString().slice(-6)}</Text>
+              </View>
+
+              <View style={styles.confirmationDivider} />
+
+              <View style={styles.confirmationDetail}>
+                <MapPin size={16} color={theme.colors.textLight} />
+                <View style={styles.confirmationDetailText}>
+                  <Text style={styles.confirmationDetailLabel}>Location</Text>
+                  <Text style={styles.confirmationDetailValue}>{mockSession.locationName}</Text>
+                </View>
+              </View>
+
+              <View style={styles.confirmationDetail}>
+                <Clock size={16} color={theme.colors.textLight} />
+                <View style={styles.confirmationDetailText}>
+                  <Text style={styles.confirmationDetailLabel}>Extension Added</Text>
+                  <Text style={styles.confirmationDetailValue}>
+                    {selectedExtension !== null ? extensionOptions[selectedExtension].label : ''}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.confirmationDetail}>
+                <Calendar size={16} color={theme.colors.textLight} />
+                <View style={styles.confirmationDetailText}>
+                  <Text style={styles.confirmationDetailLabel}>New End Time</Text>
+                  <Text style={styles.confirmationDetailValue}>
+                    {selectedExtension !== null
+                      ? new Date(Date.now() + extensionOptions[selectedExtension].duration * 60000).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                        })
+                      : ''}
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.paymentSummaryCard}>
+              <View style={styles.paymentSummaryHeader}>
+                <CreditCard size={20} color={theme.colors.accent} />
+                <Text style={styles.paymentSummaryTitle}>Payment Summary</Text>
+              </View>
+
+              <View style={styles.paymentSummaryRow}>
+                <Text style={styles.paymentSummaryLabel}>Extension Fee</Text>
+                <Text style={styles.paymentSummaryValue}>
+                  ${selectedExtension !== null ? extensionOptions[selectedExtension].price.toFixed(2) : '0.00'}
+                </Text>
+              </View>
+
+              <View style={styles.confirmationDivider} />
+
+              <View style={styles.paymentSummaryRow}>
+                <Text style={styles.paymentSummaryTotalLabel}>Amount Charged</Text>
+                <Text style={styles.paymentSummaryTotalValue}>
+                  ${selectedExtension !== null ? extensionOptions[selectedExtension].price.toFixed(2) : '0.00'}
+                </Text>
+              </View>
+
+              <View style={styles.paymentMethodBadge}>
+                <Text style={styles.paymentMethodText}>Charged to card ending in 4242</Text>
+              </View>
+            </View>
+
+            <View style={styles.confirmationInfoCard}>
+              <Text style={styles.confirmationInfoText}>
+                A receipt has been sent to your email. You can continue parking until the new end time.
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.confirmationDoneButton}
+              onPress={handleCloseConfirmation}
+              activeOpacity={0.8}>
+              <Text style={styles.confirmationDoneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
       </Modal>
     </View>
@@ -710,6 +835,193 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   confirmExtendButtonText: {
+    fontSize: theme.fontSize.base,
+    fontWeight: theme.fontWeight.semibold,
+    color: theme.colors.white,
+  },
+  processingOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  processingCard: {
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.xl,
+    alignItems: 'center',
+    gap: theme.spacing.md,
+    ...theme.shadows.lg,
+  },
+  processingText: {
+    fontSize: theme.fontSize.base,
+    fontWeight: theme.fontWeight.semibold,
+    color: theme.colors.text,
+  },
+  confirmationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingTop: 60,
+    paddingHorizontal: theme.spacing.lg,
+    paddingBottom: theme.spacing.lg,
+    backgroundColor: theme.colors.primary,
+  },
+  confirmationHeaderTitle: {
+    fontSize: theme.fontSize.xl,
+    fontWeight: theme.fontWeight.bold,
+    color: theme.colors.white,
+    marginBottom: 4,
+  },
+  confirmationHeaderSubtitle: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.accent,
+    fontWeight: theme.fontWeight.medium,
+  },
+  confirmationScrollContent: {
+    padding: theme.spacing.lg,
+    paddingBottom: theme.spacing.xxl,
+  },
+  confirmationIconContainer: {
+    alignItems: 'center',
+    marginTop: theme.spacing.xl,
+    marginBottom: theme.spacing.xl,
+  },
+  confirmationTitle: {
+    fontSize: theme.fontSize.xxxl,
+    fontWeight: theme.fontWeight.bold,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.sm,
+    textAlign: 'center',
+  },
+  confirmationSubtitle: {
+    fontSize: theme.fontSize.base,
+    color: theme.colors.textLight,
+    textAlign: 'center',
+    marginBottom: theme.spacing.xl,
+  },
+  confirmationDetailsCard: {
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.md,
+  },
+  confirmationCodeRow: {
+    alignItems: 'center',
+    paddingBottom: theme.spacing.md,
+  },
+  confirmationCodeLabel: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.textLight,
+    marginBottom: theme.spacing.xs,
+  },
+  confirmationCode: {
+    fontSize: theme.fontSize.xxl,
+    fontWeight: theme.fontWeight.bold,
+    color: theme.colors.accent,
+    letterSpacing: 2,
+  },
+  confirmationDivider: {
+    height: 1,
+    backgroundColor: theme.colors.border,
+    marginVertical: theme.spacing.md,
+  },
+  confirmationDetail: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingVertical: theme.spacing.sm,
+  },
+  confirmationDetailText: {
+    flex: 1,
+    marginLeft: theme.spacing.md,
+  },
+  confirmationDetailLabel: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.textLight,
+    marginBottom: 4,
+  },
+  confirmationDetailValue: {
+    fontSize: theme.fontSize.base,
+    color: theme.colors.text,
+    fontWeight: theme.fontWeight.semibold,
+  },
+  paymentSummaryCard: {
+    backgroundColor: theme.colors.white,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.lg,
+    ...theme.shadows.md,
+  },
+  paymentSummaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    marginBottom: theme.spacing.md,
+  },
+  paymentSummaryTitle: {
+    fontSize: theme.fontSize.base,
+    fontWeight: theme.fontWeight.semibold,
+    color: theme.colors.text,
+  },
+  paymentSummaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.sm,
+  },
+  paymentSummaryLabel: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.textLight,
+  },
+  paymentSummaryValue: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.text,
+    fontWeight: theme.fontWeight.medium,
+  },
+  paymentSummaryTotalLabel: {
+    fontSize: theme.fontSize.base,
+    fontWeight: theme.fontWeight.bold,
+    color: theme.colors.text,
+  },
+  paymentSummaryTotalValue: {
+    fontSize: theme.fontSize.xl,
+    fontWeight: theme.fontWeight.bold,
+    color: theme.colors.accent,
+  },
+  paymentMethodBadge: {
+    backgroundColor: theme.colors.backgroundDark,
+    padding: theme.spacing.sm,
+    borderRadius: theme.borderRadius.md,
+    marginTop: theme.spacing.md,
+    alignItems: 'center',
+  },
+  paymentMethodText: {
+    fontSize: theme.fontSize.xs,
+    color: theme.colors.textLight,
+    fontWeight: theme.fontWeight.medium,
+  },
+  confirmationInfoCard: {
+    backgroundColor: theme.colors.backgroundDark,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.xl,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.accent,
+  },
+  confirmationInfoText: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.textLight,
+    lineHeight: 20,
+  },
+  confirmationDoneButton: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.lg,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.xl,
+    alignItems: 'center',
+  },
+  confirmationDoneButtonText: {
     fontSize: theme.fontSize.base,
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.white,
