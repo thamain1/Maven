@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import { useState } from 'react';
-import { Search, MapPin, Clock, DollarSign, Star, Navigation } from 'lucide-react-native';
+import { Search, MapPin, Clock, DollarSign, Star, Navigation, Users } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
 import { useRouter } from 'expo-router';
 import { mockLocations } from '../../data/mockData';
@@ -30,6 +30,20 @@ export default function HomeScreen() {
           />
         </View>
       </View>
+
+      <TouchableOpacity
+        style={styles.partnerParkingBanner}
+        onPress={() => router.push('/partner-parking')}
+        activeOpacity={0.8}>
+        <View style={styles.partnerParkingIconWrapper}>
+          <Users size={28} color={theme.colors.accent} />
+        </View>
+        <View style={styles.partnerParkingContent}>
+          <Text style={styles.partnerParkingTitle}>Partner Parking</Text>
+          <Text style={styles.partnerParkingSubtitle}>Reserve multiple spaces for your group</Text>
+        </View>
+        <Navigation size={20} color={theme.colors.accent} style={{ transform: [{ rotate: '-90deg' }] }} />
+      </TouchableOpacity>
 
       <View style={styles.mapPlaceholder}>
         <MapPin size={32} color={theme.colors.accent} />
@@ -131,6 +145,42 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.md,
     fontSize: theme.fontSize.base,
     color: theme.colors.text,
+  },
+  partnerParkingBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: theme.spacing.lg,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.primary,
+    borderRadius: theme.borderRadius.lg,
+    padding: theme.spacing.lg,
+    borderWidth: 2,
+    borderColor: theme.colors.accent,
+    ...theme.shadows.md,
+  },
+  partnerParkingIconWrapper: {
+    width: 56,
+    height: 56,
+    backgroundColor: theme.colors.secondary,
+    borderRadius: theme.borderRadius.lg,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: theme.spacing.md,
+  },
+  partnerParkingContent: {
+    flex: 1,
+  },
+  partnerParkingTitle: {
+    fontSize: theme.fontSize.lg,
+    fontWeight: theme.fontWeight.bold,
+    color: theme.colors.white,
+    marginBottom: 4,
+  },
+  partnerParkingSubtitle: {
+    fontSize: theme.fontSize.sm,
+    color: theme.colors.accent,
+    fontWeight: theme.fontWeight.medium,
   },
   mapPlaceholder: {
     height: 200,
