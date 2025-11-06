@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { MapPin, Zap, Shield, Clock } from 'lucide-react-native';
 import { theme } from '../constants/theme';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MavenLogo } from '../components/MavenLogo';
 
 export default function WelcomeScreen() {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function WelcomeScreen() {
           showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <MapPin size={120} color={theme.colors.accent} strokeWidth={1.5} />
+              <MavenLogo size={200} />
             </View>
             <View style={styles.brandContainer}>
               <Text style={styles.brandName}>Maven Park</Text>
