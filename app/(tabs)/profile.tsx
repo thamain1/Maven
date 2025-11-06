@@ -1,33 +1,68 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { User, CreditCard, Car, Bell, Shield, HelpCircle, MessageCircle, Settings, ChevronRight, LogOut } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
+import { useRouter } from 'expo-router';
 
 const profileSections = [
   {
     title: 'Account',
     items: [
-      { icon: User, label: 'Personal Information', value: null },
-      { icon: CreditCard, label: 'Payment Methods', value: '2 cards' },
-      { icon: Car, label: 'Vehicles', value: '1 vehicle' },
+      { icon: User, label: 'Personal Information', value: null, action: 'personal-info' },
+      { icon: CreditCard, label: 'Payment Methods', value: '2 cards', action: 'payment-methods' },
+      { icon: Car, label: 'Vehicles', value: '1 vehicle', action: 'vehicles' },
     ],
   },
   {
     title: 'Preferences',
     items: [
-      { icon: Bell, label: 'Notifications', value: null },
-      { icon: Shield, label: 'Privacy & Security', value: null },
+      { icon: Bell, label: 'Notifications', value: null, action: 'notifications' },
+      { icon: Shield, label: 'Privacy & Security', value: null, action: 'privacy' },
     ],
   },
   {
     title: 'Support',
     items: [
-      { icon: HelpCircle, label: 'Help Center', value: null },
-      { icon: MessageCircle, label: 'Contact Support', value: null },
+      { icon: HelpCircle, label: 'Help Center', value: null, action: 'help' },
+      { icon: MessageCircle, label: 'Contact Support', value: null, action: 'contact' },
     ],
   },
 ];
 
 export default function ProfileScreen() {
+  const router = useRouter();
+
+  const handleMenuItemPress = (action: string) => {
+    Alert.alert(
+      'Feature',
+      `${action.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} feature coming soon!`,
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleEditProfile = () => {
+    Alert.alert(
+      'Edit Profile',
+      'Profile editing feature coming soon!',
+      [{ text: 'OK' }]
+    );
+  };
+
+  const handleSignOut = () => {
+    Alert.alert(
+      'Sign Out',
+      'Are you sure you want to sign out?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Sign Out',
+          style: 'destructive',
+          onPress: () => {
+            router.replace('/');
+          },
+        },
+      ]
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -41,7 +76,7 @@ export default function ProfileScreen() {
           </View>
           <Text style={styles.profileName}>John Doe</Text>
           <Text style={styles.profileEmail}>john.doe@example.com</Text>
-          <TouchableOpacity style={styles.editProfileButton}>
+          <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfile}>
             <Text style={styles.editProfileButtonText}>Edit Profile</Text>
           </TouchableOpacity>
         </View>
@@ -59,7 +94,8 @@ export default function ProfileScreen() {
                       styles.menuItem,
                       itemIndex !== section.items.length - 1 && styles.menuItemBorder,
                     ]}
-                    activeOpacity={0.7}>
+                    activeOpacity={0.7}
+                    onPress={() => handleMenuItemPress(item.action)}>
                     <View style={styles.menuItemLeft}>
                       <View style={styles.menuItemIcon}>
                         <Icon size={20} color={theme.colors.text} />
@@ -77,7 +113,7 @@ export default function ProfileScreen() {
           </View>
         ))}
 
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleSignOut}>
           <LogOut size={20} color={theme.colors.error} />
           <Text style={styles.logoutButtonText}>Sign Out</Text>
         </TouchableOpacity>
