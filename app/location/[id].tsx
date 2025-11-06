@@ -16,12 +16,15 @@ import {
 } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
 import { mockLocations } from '../../data/mockData';
+import { useFavorites } from '../../contexts/FavoritesContext';
 
 export default function LocationDetailScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const location = mockLocations.find(loc => loc.id === params.id) || mockLocations[0];
+  const favorite = isFavorite(location.id);
 
   const amenities = [
     { icon: Wifi, label: 'WiFi', available: location.amenities.wifi },
@@ -37,8 +40,14 @@ export default function LocationDetailScreen() {
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <ArrowLeft size={24} color={theme.colors.white} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.favoriteButton}>
-          <Heart size={24} color={theme.colors.white} />
+        <TouchableOpacity
+          style={styles.favoriteButton}
+          onPress={() => toggleFavorite(location.id)}>
+          <Heart
+            size={24}
+            color={favorite ? theme.colors.error : theme.colors.white}
+            fill={favorite ? theme.colors.error : 'none'}
+          />
         </TouchableOpacity>
         <View style={styles.imageContent}>
           <MapPin size={48} color={theme.colors.white} />

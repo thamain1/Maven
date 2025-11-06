@@ -1,14 +1,16 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Dimensions } from 'react-native';
 import { useState } from 'react';
-import { Search, MapPin, Clock, DollarSign, Star, Navigation, Users } from 'lucide-react-native';
+import { Search, MapPin, Clock, DollarSign, Star, Navigation, Users, Heart } from 'lucide-react-native';
 import { theme } from '../../constants/theme';
 import { useRouter } from 'expo-router';
 import { mockLocations } from '../../data/mockData';
+import { useFavorites } from '../../contexts/FavoritesContext';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
@@ -59,43 +61,60 @@ export default function HomeScreen() {
           <Text style={styles.listHeaderCount}>{mockLocations.length} locations</Text>
         </View>
 
-        {mockLocations.slice(0, 5).map((location) => (
-          <TouchableOpacity
-            key={location.id}
-            style={styles.locationCard}
-            onPress={() => router.push(`/location/${location.id}` as any)}
-            activeOpacity={0.7}>
-            <View style={styles.locationImagePlaceholder}>
-              <MapPin size={24} color={theme.colors.white} />
-            </View>
-            <View style={styles.locationInfo}>
-              <View style={styles.locationHeader}>
-                <Text style={styles.locationName}>{location.name}</Text>
-                <View style={styles.ratingBadge}>
-                  <Star size={12} color={theme.colors.accent} fill={theme.colors.accent} />
-                  <Text style={styles.ratingText}>{location.rating}</Text>
+        {mockLocations.slice(0, 5).map((location) => {
+          const favorite = isFavorite(location.id);
+          return (
+            <TouchableOpacity
+              key={location.id}
+              style={styles.locationCard}
+              onPress={() => router.push(`/location/${location.id}` as any)}
+              activeOpacity={0.7}>
+              <View style={styles.locationImagePlaceholder}>
+                <MapPin size={24} color={theme.colors.white} />
+              </View>
+              <View style={styles.locationInfo}>
+                <View style={styles.locationHeader}>
+                  <Text style={styles.locationName}>{location.name}</Text>
+                  <View style={styles.locationHeaderRight}>
+                    <View style={styles.ratingBadge}>
+                      <Star size={12} color={theme.colors.accent} fill={theme.colors.accent} />
+                      <Text style={styles.ratingText}>{location.rating}</Text>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.favoriteIconButton}
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(location.id);
+                      }}>
+                      <Heart
+                        size={18}
+                        color={favorite ? theme.colors.error : theme.colors.textMuted}
+                        fill={favorite ? theme.colors.error : 'none'}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <Text style={styles.locationAddress}>{`${location.address}, ${location.city}, ${location.state}`}</Text>
+                <View style={styles.locationMeta}>
+                  <View style={styles.metaItem}>
+                    <Navigation size={14} color={theme.colors.textLight} />
+                    <Text style={styles.metaText}>{location.distance}</Text>
+                  </View>
+                  <View style={styles.metaItem}>
+                    <DollarSign size={14} color={theme.colors.textLight} />
+                    <Text style={styles.metaText}>${location.rate}/hr</Text>
+                  </View>
+                  <View style={styles.metaItem}>
+                    <Clock size={14} color={theme.colors.success} />
+                    <Text style={[styles.metaText, styles.availableText]}>
+                      {location.availableSpaces} spaces
+                    </Text>
+                  </View>
                 </View>
               </View>
-              <Text style={styles.locationAddress}>{`${location.address}, ${location.city}, ${location.state}`}</Text>
-              <View style={styles.locationMeta}>
-                <View style={styles.metaItem}>
-                  <Navigation size={14} color={theme.colors.textLight} />
-                  <Text style={styles.metaText}>{location.distance}</Text>
-                </View>
-                <View style={styles.metaItem}>
-                  <DollarSign size={14} color={theme.colors.textLight} />
-                  <Text style={styles.metaText}>${location.rate}/hr</Text>
-                </View>
-                <View style={styles.metaItem}>
-                  <Clock size={14} color={theme.colors.success} />
-                  <Text style={[styles.metaText, styles.availableText]}>
-                    {location.availableSpaces} spaces
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -257,6 +276,11 @@ const styles = StyleSheet.create({
     fontWeight: theme.fontWeight.semibold,
     color: theme.colors.text,
   },
+  locationHeaderRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
   ratingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -264,7 +288,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: 4,
     borderRadius: theme.borderRadius.sm,
-    marginLeft: theme.spacing.sm,
+  },
+  favoriteIconButton: {
+    padding: 4,
   },
   ratingText: {
     fontSize: theme.fontSize.xs,

@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { useState } from 'react';
 import { Heart, MapPin, Navigation, DollarSign, Star } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import { theme } from '../../constants/theme';
 import { mockLocations } from '../../data/mockData';
+import { useFavorites } from '../../contexts/FavoritesContext';
 
 export default function FavoritesScreen() {
   const router = useRouter();
-  const [favoriteIds, setFavoriteIds] = useState<string[]>(['1', '2']);
+  const { favoriteIds, toggleFavorite } = useFavorites();
 
   const favoriteLocations = mockLocations.filter(loc => favoriteIds.includes(loc.id));
 
@@ -21,7 +21,7 @@ export default function FavoritesScreen() {
           text: 'Remove',
           style: 'destructive',
           onPress: () => {
-            setFavoriteIds(favoriteIds.filter(id => id !== locationId));
+            toggleFavorite(locationId);
           },
         },
       ]
