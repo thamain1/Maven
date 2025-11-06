@@ -105,7 +105,7 @@ export default function AnimatedWelcomeScreen() {
           },
         ]}>
         <View style={styles.logoContainer}>
-          <MavenLogo size={200} />
+          <MavenLogo size={120} />
         </View>
 
         <Animated.View

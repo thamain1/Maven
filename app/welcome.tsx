@@ -26,7 +26,7 @@ export default function WelcomeScreen() {
           showsVerticalScrollIndicator={false}>
           <View style={styles.header}>
             <View style={styles.logoContainer}>
-              <MavenLogo size={200} />
+              <MavenLogo size={120} />
             </View>
             <View style={styles.brandContainer}>
               <Text style={styles.brandName}>Maven Park</Text>
