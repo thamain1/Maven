@@ -35,6 +35,7 @@ export default function WelcomeScreen() {
               <Text style={styles.brandName}>Maven Park</Text>
               <View style={styles.brandLine} />
               <Text style={styles.tagline}>Smart Parking Solutions</Text>
+              <Text style={styles.poweredBy}>Powered by 4WardMotions</Text>
             </View>
           </View>
 
@@ -151,6 +152,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 2,
     textTransform: 'uppercase',
+  },
+  poweredBy: {
+    fontSize: 12,
+    color: theme.colors.white,
+    fontWeight: '400',
+    marginTop: theme.spacing.sm,
+    opacity: 0.7,
   },
   featuresSection: {
     paddingVertical: theme.spacing.lg,
