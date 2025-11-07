@@ -38,6 +38,8 @@ export default function HomeScreen() {
         style={styles.scrollContainer}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
+        <MockMap height={250} showMarkers={true} markerCount={8} centerLabel="Your Location" />
+
         <TouchableOpacity
           style={styles.partnerParkingBanner}
           onPress={() => router.push('/partner-parking')}
@@ -51,8 +53,6 @@ export default function HomeScreen() {
           </View>
           <Navigation size={20} color={theme.colors.accent} style={{ transform: [{ rotate: '-90deg' }] }} />
         </TouchableOpacity>
-
-        <MockMap height={250} showMarkers={true} markerCount={8} centerLabel="Your Location" />
         <View style={styles.listHeader}>
           <Text style={styles.listHeaderTitle}>Nearby Parking</Text>
           <Text style={styles.listHeaderCount}>{mockLocations.length} locations</Text>
